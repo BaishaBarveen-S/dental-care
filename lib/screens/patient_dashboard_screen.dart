@@ -11,7 +11,7 @@ class PatientDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F8FF),
+      backgroundColor: const Color.fromARGB(255, 187, 199, 227),
 
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -55,7 +55,7 @@ class PatientDashboardScreen extends StatelessWidget {
             const SizedBox(height: 5),
 
             const Text(
-              "Welcome Back",
+              "Welcome Back!!",
               style: TextStyle(
                 color: Color(0xFF6B7280),
                 fontSize: 16,
