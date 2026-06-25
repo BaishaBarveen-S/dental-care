@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import '../../data/app_data.dart';
 import 'patient_dashboard_screen.dart';
 import 'patient_signup_screen.dart';
 
@@ -13,6 +13,7 @@ class PatientLoginScreen extends StatefulWidget {
 
 class _PatientLoginScreenState
     extends State<PatientLoginScreen> {
+
   final TextEditingController nameController =
       TextEditingController();
 
@@ -38,7 +39,6 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 30),
 
-              // Logo
               Container(
                 height: 120,
                 width: 120,
@@ -76,7 +76,6 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 35),
 
-              // Patient Name
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -94,7 +93,6 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 20),
 
-              // Mobile Number
               TextField(
                 controller: mobileController,
                 keyboardType: TextInputType.phone,
@@ -113,7 +111,6 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 20),
 
-              // Password
               TextField(
                 controller: passwordController,
                 obscureText: isPasswordHidden,
@@ -151,16 +148,7 @@ class _PatientLoginScreenState
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          "Forgot Password Coming Soon",
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: () {},
                   child: const Text(
                     "Forgot Password?",
                   ),
@@ -169,7 +157,6 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 15),
 
-              // Sign In Button
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -191,10 +178,9 @@ class _PatientLoginScreenState
                         nameController.text.trim();
 
                     if (patientName.isEmpty ||
-                        mobileController
-                            .text.isEmpty ||
-                        passwordController
-                            .text.isEmpty) {
+                        mobileController.text.isEmpty ||
+                        passwordController.text.isEmpty) {
+
                       ScaffoldMessenger.of(context)
                           .showSnackBar(
                         const SnackBar(
@@ -203,8 +189,13 @@ class _PatientLoginScreenState
                           ),
                         ),
                       );
+
                       return;
                     }
+
+                    // IMPORTANT
+                    AppData.loggedPatient =
+                        patientName;
 
                     Navigator.pushReplacement(
                       context,
@@ -230,16 +221,10 @@ class _PatientLoginScreenState
 
               const SizedBox(height: 20),
 
-              // Google Button
               OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(
                   minimumSize:
                       const Size(double.infinity, 55),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(16),
-                  ),
                 ),
 
                 onPressed: () {},
@@ -259,6 +244,7 @@ class _PatientLoginScreenState
               Row(
                 mainAxisAlignment:
                     MainAxisAlignment.center,
+
                 children: [
 
                   const Text(
@@ -275,6 +261,7 @@ class _PatientLoginScreenState
                         ),
                       );
                     },
+
                     child: const Text(
                       "Sign Up",
                     ),
@@ -288,4 +275,3 @@ class _PatientLoginScreenState
     );
   }
 }
-

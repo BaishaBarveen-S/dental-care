@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import '../../data/app_data.dart';
 import 'doctor_dashboard_screen.dart';
 import 'doctor_signup_screen.dart';
 
@@ -7,10 +7,13 @@ class DoctorLoginScreen extends StatefulWidget {
   const DoctorLoginScreen({super.key});
 
   @override
-  State<DoctorLoginScreen> createState() => _DoctorLoginScreenState();
+  State<DoctorLoginScreen> createState() =>
+      _DoctorLoginScreenState();
 }
 
-class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
+class _DoctorLoginScreenState
+    extends State<DoctorLoginScreen> {
+
   final TextEditingController doctorNameController =
       TextEditingController();
 
@@ -44,7 +47,8 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                 width: 120,
                 decoration: BoxDecoration(
                   color: const Color(0xFFEAF3FF),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius:
+                      BorderRadius.circular(30),
                 ),
                 child: const Icon(
                   Icons.medical_services,
@@ -67,23 +71,21 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
               const SizedBox(height: 8),
 
               const Text(
-                "Sign in to access your clinic dashboard",
+                "Sign in to access your dashboard",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 15,
                   color: Color(0xFF6B7280),
                 ),
               ),
 
               const SizedBox(height: 35),
 
-              // Doctor Name
               TextField(
                 controller: doctorNameController,
                 decoration: InputDecoration(
                   labelText: "Doctor Name",
                   prefixIcon:
-                      const Icon(Icons.person_outline),
+                      const Icon(Icons.person),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -95,13 +97,12 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Email
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  labelText: "Email Address",
+                  labelText: "Email",
                   prefixIcon:
-                      const Icon(Icons.email_outlined),
+                      const Icon(Icons.email),
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
@@ -113,14 +114,14 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Registration Number
               TextField(
-                controller: registrationController,
+                controller:
+                    registrationController,
                 decoration: InputDecoration(
                   labelText:
-                      "Medical Registration Number",
+                      "Medical Registration No",
                   prefixIcon: const Icon(
-                    Icons.verified_user_outlined,
+                    Icons.verified_user,
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -133,14 +134,14 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
 
               const SizedBox(height: 20),
 
-              // Password
               TextField(
                 controller: passwordController,
                 obscureText: hidePassword,
+
                 decoration: InputDecoration(
                   labelText: "Password",
                   prefixIcon:
-                      const Icon(Icons.lock_outline),
+                      const Icon(Icons.lock),
 
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -150,7 +151,8 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        hidePassword = !hidePassword;
+                        hidePassword =
+                            !hidePassword;
                       });
                     },
                   ),
@@ -165,18 +167,6 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 10),
-
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Forgot Password?",
-                  ),
-                ),
-              ),
-
               const SizedBox(height: 20),
 
               SizedBox(
@@ -184,26 +174,37 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                 height: 55,
 
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
+                  style:
+                      ElevatedButton.styleFrom(
                     backgroundColor:
                         const Color(0xFF2F80ED),
-
-                    shape: RoundedRectangleBorder(
+                    shape:
+                        RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(16),
+                          BorderRadius.circular(
+                              16),
                     ),
                   ),
 
                   onPressed: () {
 
                     if (doctorNameController
-                            .text.isEmpty ||
-                        emailController.text.isEmpty ||
+                            .text
+                            .trim()
+                            .isEmpty ||
+                        emailController.text
+                            .trim()
+                            .isEmpty ||
                         registrationController
-                            .text.isEmpty ||
-                        passwordController
-                            .text.isEmpty) {
-                      ScaffoldMessenger.of(context)
+                            .text
+                            .trim()
+                            .isEmpty ||
+                        passwordController.text
+                            .trim()
+                            .isEmpty) {
+
+                      ScaffoldMessenger.of(
+                              context)
                           .showSnackBar(
                         const SnackBar(
                           content: Text(
@@ -211,8 +212,14 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                           ),
                         ),
                       );
+
                       return;
                     }
+
+                    AppData.loggedDoctor =
+                        doctorNameController
+                            .text
+                            .trim();
 
                     Navigator.pushReplacement(
                       context,
@@ -220,7 +227,9 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                         builder: (_) =>
                             DoctorDashboardScreen(
                           doctorName:
-                              doctorNameController.text,
+                              doctorNameController
+                                  .text
+                                  .trim(),
                         ),
                       ),
                     );
@@ -229,18 +238,19 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                   child: const Text(
                     "Sign In",
                     style: TextStyle(
-                      fontSize: 18,
                       color: Colors.white,
+                      fontSize: 18,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 20),
 
               Row(
                 mainAxisAlignment:
                     MainAxisAlignment.center,
+
                 children: [
 
                   const Text(
@@ -257,6 +267,7 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
                         ),
                       );
                     },
+
                     child: const Text(
                       "Create Account",
                     ),
@@ -270,4 +281,3 @@ class _DoctorLoginScreenState extends State<DoctorLoginScreen> {
     );
   }
 }
-

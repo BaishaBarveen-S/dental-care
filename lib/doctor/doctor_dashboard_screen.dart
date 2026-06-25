@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'assigned_patients_screen.dart';
 
 class DoctorDashboardScreen extends StatelessWidget {
   final String doctorName;
@@ -37,7 +38,6 @@ class DoctorDashboardScreen extends StatelessWidget {
 
           children: [
 
-            // Greeting
             Text(
               "Hi, Dr. $doctorName 👋",
               style: const TextStyle(
@@ -58,7 +58,6 @@ class DoctorDashboardScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Statistics Card
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -175,9 +174,20 @@ class DoctorDashboardScreen extends StatelessWidget {
 
               children: [
 
-                _actionCard(
-                  Icons.people,
-                  "Patients",
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            const AssignedPatientsScreen(),
+                      ),
+                    );
+                  },
+                  child: _actionCard(
+                    Icons.people,
+                    "Patients",
+                  ),
                 ),
 
                 _actionCard(
@@ -220,7 +230,7 @@ class DoctorDashboardScreen extends StatelessWidget {
             ),
 
             _activityCard(
-              "Ahmed",
+              "hasbi",
               "Waiting for Review",
             ),
           ],
@@ -229,7 +239,6 @@ class DoctorDashboardScreen extends StatelessWidget {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
-
         items: const [
 
           BottomNavigationBarItem(
@@ -257,18 +266,16 @@ class DoctorDashboardScreen extends StatelessWidget {
   }
 
   static Widget _actionCard(
-      IconData icon,
-      String title,
-      ) {
+    IconData icon,
+    String title,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
       ),
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-
         children: [
 
           Icon(
@@ -291,24 +298,18 @@ class DoctorDashboardScreen extends StatelessWidget {
   }
 
   static Widget _activityCard(
-      String name,
-      String activity,
-      ) {
+    String name,
+    String activity,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
-
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.blue.shade100,
-          child: Text(
-            name[0],
-          ),
+          child: Text(name[0]),
         ),
-
         title: Text(name),
-
         subtitle: Text(activity),
-
         trailing: const Icon(
           Icons.arrow_forward_ios,
           size: 16,

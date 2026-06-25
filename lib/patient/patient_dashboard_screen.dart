@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../data/app_data.dart';
+import 'request_doctor_screen.dart';
+import 'chat_screen.dart';
 
-class PatientDashboardScreen extends StatelessWidget {
+class PatientDashboardScreen extends StatefulWidget {
   final String patientName;
 
   const PatientDashboardScreen({
@@ -9,15 +12,36 @@ class PatientDashboardScreen extends StatelessWidget {
   });
 
   @override
+  State<PatientDashboardScreen> createState() =>
+      _PatientDashboardScreenState();
+}
+
+class _PatientDashboardScreenState
+    extends State<PatientDashboardScreen> {
+
+  String getPatientStatus() {
+    for (var request in AppData.requests) {
+      if (request["patientName"] ==
+          widget.patientName) {
+        return request["status"];
+      }
+    }
+    return "No Request";
+  }
+
+  @override
   Widget build(BuildContext context) {
+    String consultationStatus =
+        getPatientStatus();
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 187, 199, 227),
+      backgroundColor: const Color(0xFFF5F8FF),
 
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          "DentalCare",
+          "DentalCare AI",
           style: TextStyle(
             color: Color(0xFF1F2937),
             fontWeight: FontWeight.bold,
@@ -25,201 +49,240 @@ class PatientDashboardScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {});
+            },
             icon: const Icon(
-              Icons.notifications_none,
+              Icons.refresh,
               color: Colors.black,
             ),
           ),
         ],
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          physics:
+              const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(20),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
 
-          children: [
+            children: [
 
-            // Greeting
-            Text(
-              "Hi, $patientName 👋",
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1F2937),
+              Text(
+                "Hi, ${widget.patientName} 👋",
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 5),
+              const SizedBox(height: 5),
 
-            const Text(
-              "Welcome Back!!",
-              style: TextStyle(
-                color: Color(0xFF6B7280),
-                fontSize: 16,
+              const Text(
+                "Welcome Back",
+                style: TextStyle(
+                  color: Color(0xFF6B7280),
+                ),
               ),
-            ),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-            // Patient ID Card
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.all(20),
 
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF3B82F6),
-                    Color(0xFF2563EB),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(20),
+                  gradient:
+                      const LinearGradient(
+                    colors: [
+                      Color(0xFF3B82F6),
+                      Color(0xFF2563EB),
+                    ],
+                  ),
+                ),
+
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
+                  children: [
+
+                    const Text(
+                      "Patient ID",
+                      style: TextStyle(
+                        color: Colors.white70,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    const Text(
+                      "PAT001",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight:
+                            FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Text(
+                      "Consultation Status: $consultationStatus",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
                   ],
                 ),
               ),
 
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 25),
+
+              const Text(
+                "Quick Actions",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight:
+                      FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              GridView.count(
+                shrinkWrap: true,
+                physics:
+                    const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+                childAspectRatio: 1.2,
 
                 children: [
 
-                  Text(
-                    "Patient ID",
-                    style: TextStyle(
-                      color: Colors.white70,
+                  GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const RequestDoctorScreen(),
+                        ),
+                      );
+
+                      setState(() {});
+                    },
+
+                    child: _actionCard(
+                      Icons.medical_services,
+                      "Request Doctor",
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
 
-                  Text(
-                    "PAT001",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                      if (consultationStatus ==
+                          "Accepted") {
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const ChatScreen(),
+                          ),
+                        );
+
+                      } else {
+
+                        ScaffoldMessenger.of(
+                                context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Chat unlocks after doctor accepts your request",
+                            ),
+                          ),
+                        );
+                      }
+                    },
+
+                    child: _actionCard(
+                      Icons.chat_bubble_outline,
+                      "Chat",
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  _actionCard(
+                    Icons.description_outlined,
+                    "Reports",
+                  ),
 
-                  Text(
-                    "Consultation Status: Waiting",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                  _actionCard(
+                    Icons.person_outline,
+                    "Profile",
                   ),
                 ],
               ),
-            ),
 
-            const SizedBox(height: 25),
+              const SizedBox(height: 25),
 
-            const Text(
-              "Quick Actions",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              const Text(
+                "Recent Activity",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight:
+                      FontWeight.bold,
+                ),
               ),
-            ),
 
-            const SizedBox(height: 15),
+              const SizedBox(height: 15),
 
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
-              childAspectRatio: 1.2,
+              Card(
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.history,
+                    color: Colors.blue,
+                  ),
 
-              children: [
+                  title: const Text(
+                    "Consultation Status",
+                  ),
 
-                _actionCard(
-                  Icons.medical_services,
-                  "Request Doctor",
+                  subtitle: Text(
+                    consultationStatus,
+                  ),
                 ),
-
-                _actionCard(
-                  Icons.chat_bubble_outline,
-                  "Chat",
-                ),
-
-                _actionCard(
-                  Icons.description_outlined,
-                  "Reports",
-                ),
-
-                _actionCard(
-                  Icons.person_outline,
-                  "Profile",
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 25),
-
-            const Text(
-              "Recent Activity",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
               ),
-            ),
-
-            const SizedBox(height: 15),
-
-            _activityTile(
-              "Consultation Requested",
-              "Waiting for doctor approval",
-            ),
-
-            _activityTile(
-              "No Reports Yet",
-              "Your reports will appear here",
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-
-        items: const [
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: "Chat",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description),
-            label: "Reports",
-          ),
-
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
       ),
     );
   }
 
-  static Widget _actionCard(
+  Widget _actionCard(
     IconData icon,
     String title,
   ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius:
+            BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
@@ -229,7 +292,8 @@ class PatientDashboardScreen extends StatelessWidget {
       ),
 
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment:
+            MainAxisAlignment.center,
 
         children: [
 
@@ -244,39 +308,11 @@ class PatientDashboardScreen extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontWeight: FontWeight.w600,
+              fontWeight:
+                  FontWeight.w600,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  static Widget _activityTile(
-    String title,
-    String subtitle,
-  ) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-
-      child: ListTile(
-        leading: const CircleAvatar(
-          backgroundColor: Color(0xFFEAF3FF),
-          child: Icon(
-            Icons.history,
-            color: Color(0xFF2F80ED),
-          ),
-        ),
-
-        title: Text(title),
-        subtitle: Text(subtitle),
-
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-        ),
       ),
     );
   }
